@@ -12,6 +12,7 @@ export interface TaskCardProps {
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
   onTogglePriority: (id: number) => void;
+  onDownload: (task: Task) => void;
 }
 
 export interface AddTaskFormProps {

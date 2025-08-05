@@ -17,11 +17,12 @@ A beautiful and modern todo list application built with **React**, **TypeScript*
 - 🔍 **Advanced Filtering** - Filter by status and priority
 - 🔎 **Real-time Search** - Search across task titles and descriptions
 - 📊 **Statistics Dashboard** - Track completion rates and metrics
+- 💾 **Local Storage Persistence** - Tasks automatically saved to browser storage
+- 📥 **Individual Task Download** - Download any task as a JSON file
 - 🎨 **Modern Glassmorphism UI** - Beautiful glass-effect design
 - 📱 **Fully Responsive** - Works on all devices
 - ⚡ **Smooth Animations** - Enhanced user experience
 - 🌈 **Color-coded Priorities** - Visual priority indicators
-- 💾 **State Management** - Efficient React state handling
 
 ---
 
@@ -39,6 +40,8 @@ src/
 ├── pages/                  # Page components
 │   ├── TodoList.tsx        # Main todo list page
 │   └── index.ts            # Page exports  
+├── hooks/                  # Custom React hooks
+│   └── useLocalStorage.ts  # LocalStorage management hooks
 ├── types/                  # TypeScript type definitions
 │   └── index.ts            # Shared interfaces and types
 ├── App.tsx                 # Main application component
@@ -223,6 +226,7 @@ The application is fully responsive with breakpoints:
 - **Priority Setting**: Choose from Low, Medium, or High priority
 - **Task Completion**: Click the circle icon to mark complete
 - **Task Deletion**: Hover over task to reveal delete button
+- **Individual Download**: Click the download icon to save a single task as JSON file
 
 ### Filtering & Search
 - **Filter Options**: All Tasks, Pending, Completed, High Priority
@@ -271,12 +275,11 @@ npm run preview
 
 ## 🌟 Future Enhancements
 
-- [ ] **Local Storage Persistence** - Save tasks between sessions
 - [ ] **Drag & Drop Reordering** - Rearrange tasks by dragging
 - [ ] **Due Dates & Reminders** - Add deadline functionality  
 - [ ] **Task Categories** - Organize tasks with tags/categories
 - [ ] **Dark Mode** - Toggle between light and dark themes
-- [ ] **Export/Import** - Backup and restore task data
+- [ ] **Bulk Task Management** - Export/import multiple tasks at once
 - [ ] **Collaborative Features** - Share tasks with others
 - [ ] **Progressive Web App** - Offline functionality
 

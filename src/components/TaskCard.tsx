@@ -1,8 +1,8 @@
 import React from 'react';
-import { CheckCircle2, Trash2, Calendar, Star } from 'lucide-react';
+import { CheckCircle2, Trash2, Calendar, Star, Download } from 'lucide-react';
 import { TaskCardProps } from '../types';
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete, onTogglePriority }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete, onTogglePriority, onDownload }) => {
   return (
     <div className={`group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-l-4 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] animate-slide-in-up border border-white/20 ${
       task.completed 
@@ -67,6 +67,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete, onToggleP
               title="Toggle Priority"
             >
               <Star size={18} className={task.priority === 'high' ? 'fill-current' : ''} />
+            </button>
+            <button
+              onClick={() => onDownload(task)}
+              className="p-2 text-gray-400 hover:text-blue-500 hover:bg-blue-100 transition-all duration-200 rounded-xl hover:scale-110"
+              title="Download Task"
+            >
+              <Download size={18} />
             </button>
             <button
               onClick={() => onDelete(task.id)}

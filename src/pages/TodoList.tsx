@@ -2,24 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { ListTodo } from 'lucide-react';
 import { Task } from '../types';
 import { TaskCard, AddTaskForm, Statistics, FilterBar } from '../components';
+import { useTaskStorage } from '../hooks/useLocalStorage';
 
 const TodoList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { tasks, setTasks } = useTaskStorage();
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Load tasks from memory on component mount
+  // Initialize with demo tasks if no tasks exist
   useEffect(() => {
-    const savedTasks: Task[] = [];
-    if (savedTasks.length > 0) {
-      setTasks(savedTasks);
-    } else {
-      // Demo tasks for initial load
+    if (tasks.length === 0) {
       const demoTasks: Task[] = [
         {
           id: 1,
-          text: 'Welcome to your creative to-do app!',
-          description: 'This is a sample task to get you started. You can edit, complete, or delete it.',
+          text: 'Welcome to your creative to-do app! 🎉',
+          description: 'This is a sample task to get you started. Your tasks are now automatically saved to your browser\'s local storage and will persist between sessions!',
           completed: false,
           priority: 'high',
           createdAt: new Date().toISOString()
@@ -27,7 +24,7 @@ const TodoList: React.FC = () => {
         {
           id: 2,
           text: 'Complete the React project',
-          description: 'Finish building the todo app with all features',
+          description: 'Finish building the todo app with all features including local storage',
           completed: false,
           priority: 'medium',
           createdAt: new Date().toISOString()
@@ -35,13 +32,7 @@ const TodoList: React.FC = () => {
       ];
       setTasks(demoTasks);
     }
-  }, []);
-
-  // Save tasks to memory whenever tasks change
-  useEffect(() => {
-    // In a real app, you would save to localStorage here
-    // localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
+  }, [tasks.length, setTasks]);
 
   const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
     const newTask: Task = {
@@ -72,6 +63,30 @@ const TodoList: React.FC = () => {
           }
         : task
     ));
+  };
+
+  const downloadTask = (task: Task) => {
+    const taskData = {
+      id: task.id,
+      text: task.text,
+      description: task.description,
+      completed: task.completed,
+      priority: task.priority,
+      createdAt: task.createdAt,
+      downloadedAt: new Date().toISOString()
+    };
+    
+    const dataStr = JSON.stringify(taskData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `task-${task.id}-${task.text.slice(0, 20).replace(/[^a-zA-Z0-9]/g, '-')}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Filter tasks based on current filter and search term
@@ -119,6 +134,7 @@ const TodoList: React.FC = () => {
               onToggle={toggleTask}
               onDelete={deleteTask}
               onTogglePriority={togglePriority}
+              onDownload={downloadTask}
             />
           ))
         ) : (
