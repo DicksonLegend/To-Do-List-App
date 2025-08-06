@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
             </div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3">
-              Creative To-Do List
+              To-Do List
             </h1>
             <p className="text-gray-600 text-lg font-medium">
               Stay organized and productive with style

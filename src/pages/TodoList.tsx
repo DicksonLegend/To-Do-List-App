@@ -15,7 +15,7 @@ const TodoList: React.FC = () => {
       const demoTasks: Task[] = [
         {
           id: 1,
-          text: 'Welcome to your creative to-do app! 🎉',
+          text: 'Welcome to your to-do app! 🎉',
           description: 'This is a sample task to get you started. Your tasks are now automatically saved to your browser\'s local storage and will persist between sessions!',
           completed: false,
           priority: 'high',

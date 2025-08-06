@@ -1,5 +1,5 @@
 
-# ✨ Creative To-Do List App
+# ✨ To-Do List App
 
 A beautiful and modern todo list application built with **React**, **TypeScript**, and **Tailwind CSS**. Features a glassmorphism design, priority management, task filtering, real-time search, and comprehensive statistics dashboard.
 
@@ -107,7 +107,7 @@ npm run dev
 
 ### 4. Open Your Browser
 
-Navigate to `http://localhost:5173` to see your Creative To-Do List app in action!
+Navigate to `http://localhost:5173` to see your To-Do List app in action!
 
 ---
 
