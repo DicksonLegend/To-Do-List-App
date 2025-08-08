@@ -48,10 +48,10 @@ class TaskUpdate(BaseModel):
 # FastAPI app
 app = FastAPI(title="Simple Todo API", version="1.0.0")
 
-# Enable CORS for React
+# Enable CORS for React (allow all origins for deployment)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],  # Allow all origins for Render deployment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
