@@ -1,5 +1,30 @@
-// Simple API service for connecting to FastAPI backend
-const API_BASE_URL = 'http://localhost:8000';
+// API service for connecting to FastAPI backend
+import { API_BASE_URL } from '../config/environment';
+import { localStorageFallback } from './fallback';
+import { Task } from '../types';
+
+// Convert API response to Task format
+const convertApiTaskToTask = (apiTask: TaskResponse): Task => ({
+  id: apiTask.id,
+  text: apiTask.text,
+  description: apiTask.description,
+  completed: apiTask.completed,
+  priority: apiTask.priority,
+  createdAt: apiTask.created_at
+});
+
+// Check if backend is available
+const checkBackendHealth = async (): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/`, { 
+      method: 'GET',
+      signal: AbortSignal.timeout(5000) // 5 second timeout
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+};
 
 export interface TaskResponse {
   id: number;
@@ -23,18 +48,31 @@ export interface TaskUpdate {
   priority?: 'low' | 'medium' | 'high';
 }
 
-// Get all tasks
-export const getTasks = async (): Promise<TaskResponse[]> => {
+// Get all tasks (with fallback to localStorage)
+export const getTasks = async (): Promise<Task[]> => {
   try {
+    // Check if backend is available
+    const isBackendAvailable = await checkBackendHealth();
+    
+    if (!isBackendAvailable) {
+      console.warn('⚠️ Backend not available, using localStorage fallback');
+      return localStorageFallback.getTasks();
+    }
+
     const response = await fetch(`${API_BASE_URL}/tasks`);
     if (!response.ok) {
       throw new Error('Failed to fetch tasks');
     }
+    
     const data = await response.json();
-    return data.tasks || [];
+    const apiTasks = data.tasks || [];
+    
+    // Convert API tasks to Task format
+    return apiTasks.map(convertApiTaskToTask);
+    
   } catch (error) {
-    console.error('Error fetching tasks:', error);
-    return [];
+    console.error('Error fetching tasks from API, using fallback:', error);
+    return localStorageFallback.getTasks();
   }
 };
 
