@@ -6,30 +6,17 @@ import * as api from '../services/api';
 
 const TodoList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Load tasks from API
   useEffect(() => {
     const loadTasks = async () => {
-      setLoading(true);
       try {
-        const apiTasks = await api.getTasks();
-        // Convert API tasks to our Task format
-        const convertedTasks: Task[] = apiTasks.map(apiTask => ({
-          id: apiTask.id,
-          text: apiTask.text,
-          description: apiTask.description,
-          completed: apiTask.completed,
-          priority: apiTask.priority as 'low' | 'medium' | 'high',
-          createdAt: apiTask.created_at
-        }));
-        setTasks(convertedTasks);
+        const tasks = await api.getTasks();
+        setTasks(tasks);
       } catch (error) {
         console.error('Failed to load tasks:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -45,15 +32,7 @@ const TodoList: React.FC = () => {
       });
       
       if (newTask) {
-        const convertedTask: Task = {
-          id: newTask.id,
-          text: newTask.text,
-          description: newTask.description,
-          completed: newTask.completed,
-          priority: newTask.priority as 'low' | 'medium' | 'high',
-          createdAt: newTask.created_at
-        };
-        setTasks(prev => [convertedTask, ...prev]);
+        setTasks(prev => [newTask, ...prev]);
       }
     } catch (error) {
       console.error('Failed to add task:', error);

@@ -76,9 +76,17 @@ export const getTasks = async (): Promise<Task[]> => {
   }
 };
 
-// Create a new task
-export const createTask = async (task: TaskCreate): Promise<TaskResponse | null> => {
+// Create a new task (with fallback to localStorage)
+export const createTask = async (task: TaskCreate): Promise<Task | null> => {
   try {
+    // Check if backend is available
+    const isBackendAvailable = await checkBackendHealth();
+    
+    if (!isBackendAvailable) {
+      console.warn('⚠️ Backend not available, using localStorage fallback');
+      return localStorageFallback.addTask(task);
+    }
+
     const response = await fetch(`${API_BASE_URL}/tasks`, {
       method: 'POST',
       headers: {
@@ -92,16 +100,25 @@ export const createTask = async (task: TaskCreate): Promise<TaskResponse | null>
     }
     
     const data = await response.json();
-    return data.task;
+    return convertApiTaskToTask(data.task);
+    
   } catch (error) {
-    console.error('Error creating task:', error);
-    return null;
+    console.error('Error creating task, using fallback:', error);
+    return localStorageFallback.addTask(task);
   }
 };
 
-// Update a task
-export const updateTask = async (id: number, updates: TaskUpdate): Promise<TaskResponse | null> => {
+// Update a task (with fallback to localStorage)
+export const updateTask = async (id: number, updates: TaskUpdate): Promise<Task | null> => {
   try {
+    // Check if backend is available
+    const isBackendAvailable = await checkBackendHealth();
+    
+    if (!isBackendAvailable) {
+      console.warn('⚠️ Backend not available, using localStorage fallback');
+      return localStorageFallback.updateTask(id, updates);
+    }
+
     const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
       method: 'PUT',
       headers: {
@@ -115,16 +132,25 @@ export const updateTask = async (id: number, updates: TaskUpdate): Promise<TaskR
     }
     
     const data = await response.json();
-    return data.task;
+    return convertApiTaskToTask(data.task);
+    
   } catch (error) {
-    console.error('Error updating task:', error);
-    return null;
+    console.error('Error updating task, using fallback:', error);
+    return localStorageFallback.updateTask(id, updates);
   }
 };
 
-// Delete a task
+// Delete a task (with fallback to localStorage)
 export const deleteTask = async (id: number): Promise<boolean> => {
   try {
+    // Check if backend is available
+    const isBackendAvailable = await checkBackendHealth();
+    
+    if (!isBackendAvailable) {
+      console.warn('⚠️ Backend not available, using localStorage fallback');
+      return localStorageFallback.deleteTask(id);
+    }
+
     const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
       method: 'DELETE',
     });
@@ -134,8 +160,9 @@ export const deleteTask = async (id: number): Promise<boolean> => {
     }
     
     return true;
+    
   } catch (error) {
-    console.error('Error deleting task:', error);
-    return false;
+    console.error('Error deleting task, using fallback:', error);
+    return localStorageFallback.deleteTask(id);
   }
 };
