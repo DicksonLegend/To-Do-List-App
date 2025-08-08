@@ -1,28 +1,32 @@
 
 # ✨ To-Do List App
 
-A beautiful and modern todo list application built with **React**, **TypeScript**, and **Tailwind CSS**. Features a glassmorphism design, priority management, task filtering, real-time search, and comprehensive statistics dashboard.
+A beautiful and modern todo list application with **React** frontend and **FastAPI** backend, connected to **PostgreSQL** database. Features a glassmorphism design, priority management, task filtering, real-time search, and database persistence.
 
 ![To-Do List App](https://img.shields.io/badge/Status-Complete-brightgreen)
 ![React](https://img.shields.io/badge/React-19.0.0-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7.2-blue)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4.17-cyan)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 
 ---
 
 ## 🚀 Features
 
-- ✅ **Add, Edit & Delete Tasks** - Full CRUD operations
+- ✅ **Full-Stack Application** - React frontend with FastAPI backend
+- 🗄️ **Database Storage** - PostgreSQL database hosted on Render
+- ✅ **Add, Edit & Delete Tasks** - Full CRUD operations with database persistence
 - 🎯 **Priority Management** - Low, Medium, High priority levels  
 - 🔍 **Advanced Filtering** - Filter by status and priority
 - 🔎 **Real-time Search** - Search across task titles and descriptions
 - 📊 **Statistics Dashboard** - Track completion rates and metrics
-- 💾 **Local Storage Persistence** - Tasks automatically saved to browser storage
 - 📥 **Individual Task Download** - Download any task as a JSON file
 - 🎨 **Modern Glassmorphism UI** - Beautiful glass-effect design
 - 📱 **Fully Responsive** - Works on all devices
 - ⚡ **Smooth Animations** - Enhanced user experience
 - 🌈 **Color-coded Priorities** - Visual priority indicators
+- 📚 **API Documentation** - Auto-generated FastAPI docs
 
 ---
 
@@ -86,14 +90,55 @@ src/
 
 ## 🚀 Getting Started
 
+### Prerequisites
+- **Node.js 18+** and npm
+- **Python 3.9+**
+- **PostgreSQL database** (Render account recommended)
+
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/DicksonLegend/To-Do-List-App.git
 cd To-Do-List-App
 ```
 
-### 2. Install Dependencies
+### 2. Set Up Backend API
+
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment (Windows)
+.\venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your PostgreSQL connection string
+
+# Start the API server
+python main.py
+```
+
+The API will be available at `http://localhost:8000` 📚 API docs: `http://localhost:8000/docs`
+
+### 3. Set Up Frontend
+
+```bash
+# In a new terminal, from project root
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### 4. Open the Application
+
+Open your browser and navigate to `http://localhost:5173` to see your todo app! 🎉
 
 ```bash
 npm install

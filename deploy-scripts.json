@@ -1,0 +1,12 @@
+{
+  "name": "deploy-script",
+  "scripts": {
+    "deploy:backend": "echo 'Deploy backend to Render using the dashboard'",
+    "deploy:frontend": "npm run build && echo 'Deploy dist folder to your hosting service'",
+    "dev:backend": "cd backend && python main.py",
+    "dev:frontend": "npm run dev",
+    "dev:full": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "install:backend": "cd backend && pip install -r requirements.txt",
+    "test:backend": "cd backend && python test_db.py"
+  }
+}

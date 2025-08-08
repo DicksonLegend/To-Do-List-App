@@ -119,6 +119,12 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
     print("🚀 Starting Simple Todo API...")
     print("📖 API docs: http://localhost:8000/docs")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    
+    # Get port from environment variable (for deployment) or default to 8000
+    port = int(os.getenv("PORT", 8000))
+    
+    uvicorn.run(app, host="0.0.0.0", port=port)
