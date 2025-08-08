@@ -5,6 +5,24 @@ export interface Task {
   completed: boolean;
   priority: 'low' | 'medium' | 'high';
   createdAt: string;
+  updatedAt?: string;
+  userId?: number;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  created_at: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+  isLoading: boolean;
 }
 
 export interface TaskCardProps {

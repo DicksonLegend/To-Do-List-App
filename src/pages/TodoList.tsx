@@ -2,67 +2,107 @@ import React, { useState, useEffect } from 'react';
 import { ListTodo } from 'lucide-react';
 import { Task } from '../types';
 import { TaskCard, AddTaskForm, Statistics, FilterBar } from '../components';
-import { useTaskStorage } from '../hooks/useLocalStorage';
+import * as api from '../services/api';
 
 const TodoList: React.FC = () => {
-  const { tasks, setTasks } = useTaskStorage();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Initialize with demo tasks if no tasks exist
+  // Load tasks from API
   useEffect(() => {
-    if (tasks.length === 0) {
-      const demoTasks: Task[] = [
-        {
-          id: 1,
-          text: 'Welcome to your to-do app! 🎉',
-          description: 'This is a sample task to get you started. Your tasks are now automatically saved to your browser\'s local storage and will persist between sessions!',
-          completed: false,
-          priority: 'high',
-          createdAt: new Date().toISOString()
-        },
-        {
-          id: 2,
-          text: 'Complete the React project',
-          description: 'Finish building the todo app with all features including local storage',
-          completed: false,
-          priority: 'medium',
-          createdAt: new Date().toISOString()
-        }
-      ];
-      setTasks(demoTasks);
-    }
-  }, [tasks.length, setTasks]);
-
-  const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
-    const newTask: Task = {
-      id: Date.now(),
-      ...taskData,
-      completed: false,
-      createdAt: new Date().toISOString()
+    const loadTasks = async () => {
+      setLoading(true);
+      try {
+        const apiTasks = await api.getTasks();
+        // Convert API tasks to our Task format
+        const convertedTasks: Task[] = apiTasks.map(apiTask => ({
+          id: apiTask.id,
+          text: apiTask.text,
+          description: apiTask.description,
+          completed: apiTask.completed,
+          priority: apiTask.priority as 'low' | 'medium' | 'high',
+          createdAt: apiTask.created_at
+        }));
+        setTasks(convertedTasks);
+      } catch (error) {
+        console.error('Failed to load tasks:', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    setTasks(prev => [newTask, ...prev]);
+
+    loadTasks();
+  }, []);
+
+  const addTask = async (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
+    try {
+      const newTask = await api.createTask({
+        text: taskData.text,
+        description: taskData.description,
+        priority: taskData.priority
+      });
+      
+      if (newTask) {
+        const convertedTask: Task = {
+          id: newTask.id,
+          text: newTask.text,
+          description: newTask.description,
+          completed: newTask.completed,
+          priority: newTask.priority as 'low' | 'medium' | 'high',
+          createdAt: newTask.created_at
+        };
+        setTasks(prev => [convertedTask, ...prev]);
+      }
+    } catch (error) {
+      console.error('Failed to add task:', error);
+    }
   };
 
-  const toggleTask = (id: number) => {
-    setTasks(prev => prev.map(task => 
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+  const toggleTask = async (id: number) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+
+    try {
+      const updatedTask = await api.updateTask(id, { completed: !task.completed });
+      if (updatedTask) {
+        setTasks(prev => prev.map(t => 
+          t.id === id ? { ...t, completed: !t.completed } : t
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to toggle task:', error);
+    }
   };
 
-  const deleteTask = (id: number) => {
-    setTasks(prev => prev.filter(task => task.id !== id));
+  const deleteTask = async (id: number) => {
+    try {
+      const success = await api.deleteTask(id);
+      if (success) {
+        setTasks(prev => prev.filter(task => task.id !== id));
+      }
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+    }
   };
 
-  const togglePriority = (id: number) => {
-    setTasks(prev => prev.map(task => 
-      task.id === id 
-        ? { 
-            ...task, 
-            priority: task.priority === 'high' ? 'medium' : 'high'
-          }
-        : task
-    ));
+  const togglePriority = async (id: number) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+
+    const newPriority = task.priority === 'high' ? 'medium' : 'high';
+    
+    try {
+      const updatedTask = await api.updateTask(id, { priority: newPriority });
+      if (updatedTask) {
+        setTasks(prev => prev.map(t => 
+          t.id === id ? { ...t, priority: newPriority } : t
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to update priority:', error);
+    }
   };
 
   const downloadTask = (task: Task) => {
