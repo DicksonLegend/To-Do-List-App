@@ -1,8 +1,8 @@
 {
-  "name": "Tailwind_configured_React_Template",
-  "description": "A React template with Tailwind CSS configured, using Vite as the build tool.",
+  "name": "to-do-list-app",
+  "description": "A modern full-stack to-do list application with React, TypeScript, FastAPI, and PostgreSQL",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
