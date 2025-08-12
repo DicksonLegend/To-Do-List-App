@@ -1,3 +1,5 @@
+# Update .gitignore with comprehensive exclusions
+cat > .gitignore << 'EOF'
 # Logs
 logs
 *.log
@@ -7,6 +9,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
 dist
 dist-ssr
@@ -31,6 +34,27 @@ ENV/
 env.bak/
 venv.bak/
 
+# Backend unnecessary files
+backend/routers/
+backend/routes/
+backend/database.py
+backend/models.py
+backend/schemas.py
+backend/app.py
+backend/start.bat
+backend/start.sh
+backend/README_simple.md
+backend/test_db.py
+
+# Frontend unnecessary files
+src/components/AuthPage.tsx
+src/components/DataManagement.tsx
+src/components/FilterBar.tsx
+src/components/Layout.tsx
+src/components/Statistics.tsx
+src/contexts/
+src/hooks/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -41,3 +65,13 @@ venv.bak/
 *.njsproj
 *.sln
 *.sw?
+
+# Build outputs
+dist/
+build/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+EOF
