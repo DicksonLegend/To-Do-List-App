@@ -45,7 +45,6 @@ A modern, full-stack to-do list application built with React, TypeScript, and Fa
 
 - **Frontend**: [Your Render Static Site URL]
 - **Backend API**: https://to-do-list-app-ub20.onrender.com
-- **API Documentation**: https://to-do-list-app-ub20.onrender.com/docs
 
 ## 📦 Installation & Setup
 
@@ -235,24 +234,5 @@ python test_db.py    # Test database connection
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **React Team** - For the amazing React framework
-- **FastAPI** - For the high-performance Python web framework
-- **Tailwind CSS** - For the utility-first CSS framework
-- **Render** - For reliable hosting and deployment
-
-## 📞 Support
-
-If you have any questions or need help, please:
-- Open an issue on GitHub
-- Check the [API documentation](https://to-do-list-app-ub20.onrender.com/docs)
-
----
 
 **Built with ❤️ using React, TypeScript, FastAPI, and PostgreSQL**
